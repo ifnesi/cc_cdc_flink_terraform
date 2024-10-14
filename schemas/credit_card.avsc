@@ -1,0 +1,86 @@
+{
+    "namespace": "datagen",
+    "name": "credit_card",
+    "type": "record",
+    "fields": [
+        {
+            "name": "user_id",
+            "type": {
+                "type": "int",
+                "arg.properties": {
+                    "range": {
+                        "min": 1,
+                        "max": 20
+                    }
+                }
+            }
+        },
+        {
+            "name": "transaction_timestamp",
+            "type": {
+                "type": "long",
+                "logicalType": "timestamp-millis",
+                "arg.properties": {
+                    "iteration": {
+                        "start": 9999999999,
+                        "step": 1000
+                    }
+                }
+            }
+        },
+        {
+            "name": "amount",
+            "type": {
+                "type": "double",
+                "logicalType": "decimal",
+                "precision": 5,
+                "scale": 2,
+                "arg.properties": {
+                    "range": {
+                        "min": 1000.00,
+                        "max": 9999.99
+                    }
+                }
+            }
+        },
+        {
+            "name": "transaction_id",
+            "type": {
+                "type": "long",
+                "arg.properties": {
+                    "iteration": {
+                        "start": 1,
+                        "step": 1
+                    }
+                }
+            }
+        },
+        {
+            "name": "credit_card_number",
+            "type": {
+                "type": "string",
+                "arg.properties": {
+                    "options": [
+                        "5133215970354588",
+                        "5428346211202361",
+                        "5583961483446198",
+                        "5229867656325830",
+                        "5343349834261824",
+                        "346795529770669",
+                        "348556339018501",
+                        "346203455023005",
+                        "343911380603757",
+                        "340806854175170",
+                        "4595093676950957",
+                        "4793814573269484",
+                        "4352115030097572",
+                        "4432275492681794",
+                        "4068763977661309",
+                        "6579891260349642",
+                        "6516326716905172"
+                    ]
+                }
+            }
+        }
+    ]
+}

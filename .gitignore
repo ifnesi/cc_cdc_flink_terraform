@@ -1,0 +1,14 @@
+.venv
+.terraform
+
+.env
+.status.dat
+schemas/credit_card_timestamp.avsc
+tf_*.json
+
+.DS_Store
+*.hcl
+*.backup
+*.pkg
+*.tfstate
+*.info
