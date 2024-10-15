@@ -95,12 +95,26 @@ echo "WAN IP Address: $MONGODB_ATLAS_PUBLIC_IP_ADDRESS"
  - Submit the following SQL queries (one at a time):
 
 ```SQL
--------------------------------------------------------------------
--- View demo-ORCL.ADMIN.CUSTOMERS table (from topic with same name)
--------------------------------------------------------------------
-describe extended `demo-ORCL.ADMIN.CUSTOMERS`;
+-------------------------------------------------------------------------
+-- Create Table `demo-customers` derived from `demo-ORCL.ADMIN.CUSTOMERS`
+-------------------------------------------------------------------------
+CREATE TABLE `demo-customers` (
+  `user_id` BIGINT,
+  `first_name` STRING,
+  `last_name` STRING,
+  `email` STRING,
+  `avg_credit_spend` DOUBLE,
+  PRIMARY KEY (`user_id`) NOT ENFORCED  -- IMPORTANT AS THIS IS A GLOBAL TABLE!
+);
 
-select * from `demo-ORCL.ADMIN.CUSTOMERS`;
+INSERT INTO `demo-customers`
+  SELECT
+    CAST(ID AS BIGINT) AS `user_id`,
+    FIRST_NAME AS `first_name`,
+    LAST_NAME AS `last_name`,
+    EMAIL AS `email`,
+    AVG_CREDIT_SPEND AS `avg_credit_spend`
+  FROM `demo-ORCL.ADMIN.CUSTOMERS`;
 
 ----------------------------------------------------------
 -- View demo-credit-card table (from topic with same name)
@@ -122,21 +136,23 @@ CREATE TABLE `demo-credit-card-enriched` (
   `email` STRING,
   `avg_credit_spend` DOUBLE,
   WATERMARK FOR `transaction_timestamp` AS `transaction_timestamp` - INTERVAL '1' MINUTES
+) WITH (
+  'changelog.mode' = 'retract'
 );
 
 INSERT INTO `demo-credit-card-enriched`
   SELECT
-    T.user_id AS user_id,
-    T.credit_card_number AS credit_card_number,
-    T.amount AS amount,
+    T.user_id,
+    T.credit_card_number,
+    T.amount,
     CAST(T.transaction_timestamp AS TIMESTAMP) AS transaction_timestamp,
-    C.FIRST_NAME AS first_name,
-    C.LAST_NAME AS last_name,
-    C.EMAIL AS email,
-    C.AVG_CREDIT_SPEND AS avg_credit_spend
+    C.first_name,
+    C.last_name,
+    C.email,
+    C.avg_credit_spend
   FROM `demo-credit-card` T
-  INNER JOIN `demo-ORCL.ADMIN.CUSTOMERS` C
-  ON T.user_id = C.ID;
+  INNER JOIN `demo-customers` C
+  ON T.user_id = C.user_id;
 
 ----------------------------------------------------------------------------------
 -- Create table demo-credit-card-stolen-cards (topic with same name to be created)

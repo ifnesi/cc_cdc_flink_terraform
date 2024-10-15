@@ -12,3 +12,5 @@ tf_*.json
 *.pkg
 *.tfstate
 *.info
+
+*.pyc
