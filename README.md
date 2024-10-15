@@ -137,7 +137,7 @@ CREATE TABLE `demo-credit-card-enriched` (
   `avg_credit_spend` DOUBLE,
   WATERMARK FOR `transaction_timestamp` AS `transaction_timestamp` - INTERVAL '1' MINUTES
 ) WITH (
-  'changelog.mode' = 'retract'
+  'changelog.mode' = 'retract'  -- IMPORTANT BECAUSE OF THE PRIMARY KEY ON `demo-customers`!
 );
 
 INSERT INTO `demo-credit-card-enriched`
