@@ -14,3 +14,4 @@ tf_*.json
 *.info
 
 *.pyc
+*.disabled

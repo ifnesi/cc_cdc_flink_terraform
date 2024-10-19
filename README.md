@@ -187,6 +187,21 @@ INSERT INTO `demo-credit-card-stolen-cards`
   )
   GROUP BY window_start, window_end, user_id, credit_card_number, first_name, last_name, email, transaction_timestamp
   HAVING SUM(amount) > MAX(avg_credit_spend);
+
+
+--------------------------------------------------------------------------------------------
+-- Alternativelly you can create an STATEMENT SET combining all INSERTS statements into one
+-- That might help improving performance and reducing costs
+--------------------------------------------------------------------------------------------
+EXECUTE STATEMENT SET
+BEGIN
+--
+INSERT INTO `demo-customers` SELECT ...
+--
+INSERT INTO `demo-credit-card-enriched` SELECT ...
+--
+INSERT INTO `demo-credit-card-stolen-cards` SELECT ...
+END;
 ```
 
 ### Running Flink SQL statements
